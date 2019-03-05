@@ -1,9 +1,12 @@
 package com.example.noahcrieslol;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -17,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    RecyclerView myRecyclerView;
+    String[] items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Resources res = getResources();
+        myRecyclerView = (RecyclerView) findViewById(R.id.DailyView);
+        items = res.getStringArray(R.array.countries_array);
+        myRecyclerView.setAdapter(new ArrayAdapter<String>(this, R.layout.my_recyclerview_detail));
     }
 
 
@@ -113,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
