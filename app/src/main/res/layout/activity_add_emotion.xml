@@ -7,7 +7,9 @@
     tools:context=".AddEmotion">
 
     <AutoCompleteTextView
-        android:id="@+id/AutoComplete"
+        android:id="@+id/Emotion"
+        android:hint="Enter an Emotion"
+        android:completionThreshold="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

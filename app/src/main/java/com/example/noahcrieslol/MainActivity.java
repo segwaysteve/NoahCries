@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Resources res = getResources();
+        /*Resources res = getResources();
         myRecyclerView = (RecyclerView) findViewById(R.id.DailyView);
         items = res.getStringArray(R.array.countries_array);
-        myRecyclerView.setAdapter(new ArrayAdapter<String>(this, R.layout.my_recyclerview_detail));
+        myRecyclerView.setAdapter(new ArrayAdapter<String>(this, R.layout.my_recyclerview_detail));*/
     }
 
 
