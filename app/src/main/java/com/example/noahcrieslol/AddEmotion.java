@@ -15,8 +15,9 @@ public class AddEmotion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emotion);
-        AutoCompleteTextView editText = findViewById(R.id.DailyView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.)
+        AutoCompleteTextView editText = findViewById(R.id.Emotion);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        editText.setAdapter(adapter);
 
         /*String[] countries = getResources().getStringArray(R.array.countries_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, countries);

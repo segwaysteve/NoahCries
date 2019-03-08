@@ -8,8 +8,6 @@
 
     <AutoCompleteTextView
         android:id="@+id/Emotion"
-        android:hint="Enter an Emotion"
-        android:completionThreshold="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,6 +15,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:completionThreshold="1"
+        android:hint="Enter an Emotion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
