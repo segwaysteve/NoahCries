@@ -25,6 +25,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -136,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private final List<Fragment> firstFragment = new ArrayList<>();
+        private final List<String> firstTitles = new ArrayList<>();
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -144,7 +149,20 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            switch (position) {
+                case 0:
+                    Daily dailyview = new Daily();
+                    return dailyview;
+                case 1:
+                    Weekly weeklyview = new Weekly();
+                    return weeklyview;
+                case 2:
+                    Monthly monthlyview = new Monthly();
+                    return monthlyview;
+                default:
+                    return null;
+            }
         }
 
         @Override
