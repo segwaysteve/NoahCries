@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addEmotion(String emotion, String color, String date, String time, String reason) {
+    public boolean addEmotion(String emotion, Integer color, String date, String time, String reason) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1, emotion);
@@ -52,10 +52,26 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getEmotion() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        return data;
+    public int getEmotion(String emotion) {
+        int color;
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor =
+        db.query(
+                "Emotion",               // name of the table to query
+                new String[]{"color"},     // String array of columns to extract
+                "emotion=?",                    // WHERE clause (? indicates an arg)
+                new String[]{emotion},     // The list of args to replace the ? (or ?'s on a sequential basis)
+                null,                         // GROUP BY clause
+                null,                         // HAVING clause
+                "t_id DESC",                  // ORDER clause
+                "1"                           // LIMIT value as a String
+        );
+        if (cursor.moveToFirst()) {
+            color = cursor.getInt(cursor.getColumnIndex("balance"));
+        } else {
+            color = 0;
+        }
+        return color;
     }
 
     public ArrayList<String> getAllEmotions() {
