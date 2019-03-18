@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.drawable.Drawable;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "swag.db";
     public static final String TABLE_NAME = "Emotion";
-    public static final String col_1 = "emotion";
-    public static final String col_2 = "color";
-    public static final String col_3 = "date";
-    public static final String col_4 = "time";
-    public static final String col_5 = "reason";
-    public static final String col_6 = "ID";
+    public static final String col_1 = "ID";
+    public static final String col_2 = "emotion";
+    public static final String col_3 = "color";
+    public static final String col_4 = "date";
+    public static final String col_5 = "time";
+    public static final String col_6 = "reason";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 2);
@@ -38,14 +39,16 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+
     public boolean addEmotion(String emotion, Integer color, String date, String time, String reason) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(col_1, emotion);
-        contentValues.put(col_2, color);
-        contentValues.put(col_3, date);
-        contentValues.put(col_4, time);
-        contentValues.put(col_5, reason);
+        contentValues.put(col_2, emotion);
+        contentValues.put(col_3, color);
+        contentValues.put(col_4, date);
+        contentValues.put(col_5, time);
+        contentValues.put(col_6, reason);
         long result = db.insert(TABLE_NAME, null, contentValues);
         if (result == -1) {
             return false;
@@ -55,6 +58,26 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+
+
+    public boolean updateEmotion (Integer id, String emotion, Integer color, String date, String time,String reason) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(col_2, emotion);
+        contentValues.put(col_3, color);
+        contentValues.put(col_4, date);
+        contentValues.put(col_5, time);
+        contentValues.put(col_6, reason);
+        long result = db.update("Emotion", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
     public Integer deleteEmotion(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("Emotion",
@@ -62,12 +85,38 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] { Integer.toString(id) });
     }
 
+
+
     public Cursor getEmotion() {
         Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
         return cursor;
     }
 
-    public Integer getColor(String emotion) {
+
+
+    public Cursor getData(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from Emotion where id="+id+"", null);
+        return res;
+    }
+
+
+
+    public ArrayList<String> getAllEmotions() {
+        ArrayList<String> array_list = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor res = db.rawQuery("select * from Emotion", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(col_2)));
+            res.moveToNext();
+        }
+
+        return array_list;
+    }
+
+    /*public Integer getColor(String emotion) {
         int color;
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor =
@@ -87,23 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
             color = 0;
         }
         return color;
-    }
-
-
-
-    public ArrayList<String> getAllEmotions() {
-        ArrayList<String> array_list = new ArrayList<String>();
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME, null );
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(col_1)));
-            res.moveToNext();
-        }
-
-        return array_list;
-    }
+    }*/
 
 }
 

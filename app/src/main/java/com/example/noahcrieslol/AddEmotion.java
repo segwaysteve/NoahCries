@@ -95,6 +95,9 @@ public class AddEmotion extends AppCompatActivity {
         });
 
         //submits data to database and adds to main activity
+        Date = (EditText) findViewById(R.id.Date);
+        Time = (EditText) findViewById(R.id.Time);
+        Reason = (EditText) findViewById(R.id.Reason);
         submit = (Button) findViewById(R.id.Submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +110,7 @@ public class AddEmotion extends AppCompatActivity {
                 String reason = Reason.getText().toString();
                 if(Emotion.length() != 0 || Date.length() != 0 || Time.length() != 0 ) {
                     addData(emotion, color, date, time, reason);
-                    startActivity(new Intent(AddEmotion.this, MainActivity.class));
+                    startActivity(new Intent(AddEmotion.this, DailyCalendar.class));
                 }
                 else {
                     Toast.makeText(AddEmotion.this, "you must put something", Toast.LENGTH_LONG).show();
