@@ -31,14 +31,13 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import static android.os.Build.ID;
 
 public class AddEmotion extends AppCompatActivity {
-    EditText Color;
-    EditText Emotion;
+    AutoCompleteTextView Emotion;
     EditText Date;
     EditText Time;
     EditText Reason;
     Button submit;
     DBHelper mydb;
-    int DefaultColor;
+    Integer DefaultColor;
     Button cancel;
     Button OpenColorPicker;
 
@@ -53,15 +52,15 @@ public class AddEmotion extends AppCompatActivity {
         String[] array = new String[array_list.size()];
 
         //autocomplete when filling in emotion
-        AutoCompleteTextView editText = findViewById(R.id.Emotion);
+        Emotion = findViewById(R.id.Emotion);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, array_list);
-        for (int i= 0; i < array_list.size(); i++) {
+        /*for (int i= 0; i < array_list.size(); i++) {
             if (array[i].equals(Emotion.getText().toString())) {
-                int color = mydb.getEmotion(Emotion.getText().toString());
+                int color = mydb.getColor(Emotion.getText().toString());
                 OpenColorPicker.setBackgroundColor(color);
             }
-        }
-        editText.setAdapter(adapter);
+        }*/
+        Emotion.setAdapter(adapter);
 
         //set color button and default color and open color picker
         OpenColorPicker = (Button) findViewById(R.id.OpenColorPicker);
@@ -73,8 +72,6 @@ public class AddEmotion extends AppCompatActivity {
                 openColorPicker();
             }
         });
-        final ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
-        final int colorid = buttonColor.getColor();
 
         //auto date and time setter
         EditText autoDate = (EditText)findViewById(R.id.Date);
@@ -102,10 +99,31 @@ public class AddEmotion extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                run(v);
-                startActivity(new Intent(AddEmotion.this, MainActivity.class));
+                String emotion = Emotion.getText().toString();
+                ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
+                Integer color = buttonColor.getColor();
+                String date = Date.getText().toString();
+                String time = Time.getText().toString();
+                String reason = Reason.getText().toString();
+                if(Emotion.length() != 0 || Date.length() != 0 || Time.length() != 0 ) {
+                    addData(emotion, color, date, time, reason);
+                    startActivity(new Intent(AddEmotion.this, MainActivity.class));
+                }
+                else {
+                    Toast.makeText(AddEmotion.this, "you must put something", Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+
+    public void addData(String emotion, Integer color, String date, String time, String reason) {
+        boolean insertData = mydb.addEmotion(emotion, color, date, time, reason);
+        if(insertData == true) {
+            Toast.makeText(AddEmotion.this, "entered data", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(AddEmotion.this, "something went wrong", Toast.LENGTH_LONG).show();
+        }
     }
 
     //color picking method
@@ -123,37 +141,5 @@ public class AddEmotion extends AppCompatActivity {
             }
         });
         colorPicker.show();
-    }
-
-    public void run(View view) {
-        final ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
-        final int colorid = buttonColor.getColor();
-        Bundle extras = getIntent().getExtras();
-        if(extras !=null) {
-            int Value = extras.getInt("id");
-            if(Value>0){
-                if(mydb.addEmotion(Emotion.getText().toString(), colorid,
-                        Date.getText().toString(), Time.getText().toString(),
-                        Reason.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
-                } else{
-                    Toast.makeText(getApplicationContext(), "not Updated", Toast.LENGTH_SHORT).show();
-                }
-            } else{
-                if(mydb.addEmotion(Emotion.getText().toString(), colorid,
-                        Date.getText().toString(), Time.getText().toString(),
-                        Reason.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "done",
-                            Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(getApplicationContext(), "not done",
-                            Toast.LENGTH_SHORT).show();
-                }
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-            }
-        }
     }
 }

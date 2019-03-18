@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String col_3 = "date";
     public static final String col_4 = "time";
     public static final String col_5 = "reason";
+    public static final String col_6 = "ID";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 2);
@@ -26,7 +27,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, emotion TEXT, color TEXT, date TEXT, time TEXT, reason TEXT)");
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + "emotion TEXT,"
+                + "color TEXT," + "date TEXT," + "time TEXT," + "reason TEXT)";
+        db.execSQL(createTable);
     }
 
     @Override
@@ -52,14 +55,26 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int getEmotion(String emotion) {
+    public Integer deleteEmotion(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("Emotion",
+                "id = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
+    public Cursor getEmotion() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        return cursor;
+    }
+
+    public Integer getColor(String emotion) {
         int color;
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor =
         db.query(
                 "Emotion",               // name of the table to query
                 new String[]{"color"},     // String array of columns to extract
-                "emotion=?",                    // WHERE clause (? indicates an arg)
+                "emotion = ? ",                    // WHERE clause (? indicates an arg)
                 new String[]{emotion},     // The list of args to replace the ? (or ?'s on a sequential basis)
                 null,                         // GROUP BY clause
                 null,                         // HAVING clause
@@ -74,11 +89,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return color;
     }
 
-    public ArrayList<String> getAllEmotions() {
-        ArrayList<String> array_list = new ArrayList<String>();;
 
-        //hp = new HashMap();
-        SQLiteDatabase db = this.getReadableDatabase();
+
+    public ArrayList<String> getAllEmotions() {
+        ArrayList<String> array_list = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
         Cursor res =  db.rawQuery( "SELECT * FROM " + TABLE_NAME, null );
         res.moveToFirst();
 
@@ -86,6 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(col_1)));
             res.moveToNext();
         }
+
         return array_list;
     }
 
