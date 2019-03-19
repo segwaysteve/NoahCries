@@ -129,6 +129,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return color;
     }
 
+    public String getModeEmotion() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.query(TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6}, null,
+                null, col_2, "COUNT (*) = ( SELECT MAX(Cnt) FROM( SELECT COUNT(*) as Cnt FROM " + TABLE_NAME + " GROUP BY " + col_2 + " ) tmp )",
+                null, null);
+        String mode = null;
+        if (res.moveToFirst()) {
+            mode = res.getString(res.getColumnIndex(col_3));
+        }
+        return mode;
+    }
+
     public ArrayList<String> getAllDistinctEmotions() {
         ArrayList<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();

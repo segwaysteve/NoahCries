@@ -9,17 +9,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeeklyCalendar extends AppCompatActivity {
     ListView WeeklyListView;
+    TextView ModeEmotion;
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weekly_calendar);
+        mydb = new DBHelper(this);
 
         WeeklyListView = (ListView) findViewById(R.id.WeeklyListView);
         ArrayList<String> array_list = new ArrayList<String>();
@@ -34,6 +40,9 @@ public class WeeklyCalendar extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, array_list);
         WeeklyListView.setAdapter(arrayAdapter);
 
+        ModeEmotion = (TextView) findViewById(R.id.ModeEmotion);
+        String modeEmotion = mydb.getModeEmotion();
+        ModeEmotion.setText(modeEmotion);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
