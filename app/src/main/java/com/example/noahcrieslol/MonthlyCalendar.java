@@ -7,14 +7,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
 
 public class MonthlyCalendar extends AppCompatActivity {
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.monthly_calendar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        calendarView = (CalendarView) findViewById(R.id.MonthlyCalendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange( CalendarView view, int year, int month, int dayOfMonth) {
+                startActivity(new Intent(MonthlyCalendar.this, DailyCalendar.class));
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

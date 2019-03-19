@@ -43,12 +43,12 @@ public class EditEmotion extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras !=null) {
-            int Value = extras.getInt("id");
+            int id = extras.getInt("id");
 
-            if(Value>0){
+            if(id > 0){
                 //means this is the view part not the add contact part.
-                Cursor rs = mydb.getData(Value);
-                id_To_Update = Value;
+                Cursor rs = mydb.getData(id);
+                id_To_Update = id;
                 rs.moveToFirst();
 
                 String emotion = rs.getString(rs.getColumnIndex(DBHelper.col_2));
@@ -60,6 +60,7 @@ public class EditEmotion extends AppCompatActivity {
                 if (!rs.isClosed()) {
                     rs.close();
                 }
+
                 //Button b = (Button)findViewById(R.id.button1);
                 //b.setVisibility(View.INVISIBLE);
 
@@ -77,15 +78,16 @@ public class EditEmotion extends AppCompatActivity {
 
         EditUpdate = (Button) findViewById(R.id.EditUpdate);
         EditUpdate.setOnClickListener(new View.OnClickListener() {
-            String emotion = EditEmotion.getText().toString();
-            ColorDrawable buttonColor = (ColorDrawable) EditOpenColorPicker.getBackground();
-            final Integer color = buttonColor.getColor();
-            String date = EditDate.getText().toString();
-            String time = EditTime.getText().toString();
-            String reason = EditReason.getText().toString();
             @Override
             public void onClick(View v) {
-                mydb.updateEmotion(selectedID, emotion, color, date, time, reason);
+                String emotion = EditEmotion.getText().toString();
+                ColorDrawable buttonColor = (ColorDrawable) EditOpenColorPicker.getBackground();
+                int color = buttonColor.getColor();
+                String date = EditDate.getText().toString();
+                String time = EditTime.getText().toString();
+                String reason = EditReason.getText().toString();
+                mydb.updateEmotion(id_To_Update, emotion, color, date, time, reason);
+                startActivity(new Intent(EditEmotion.this, DailyCalendar.class));
             }
         });
 

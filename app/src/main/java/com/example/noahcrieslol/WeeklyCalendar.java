@@ -7,13 +7,34 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WeeklyCalendar extends AppCompatActivity {
+    ListView WeeklyListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weekly_calendar);
+
+        WeeklyListView = (ListView) findViewById(R.id.WeeklyListView);
+        ArrayList<String> array_list = new ArrayList<String>();
+        array_list.add("Monday");
+        array_list.add("Tuesday");
+        array_list.add("Wednesday");
+        array_list.add("Thursday");
+        array_list.add("Friday");
+        array_list.add("Saturday");
+        array_list.add("Sunday");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, array_list);
+        WeeklyListView.setAdapter(arrayAdapter);
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

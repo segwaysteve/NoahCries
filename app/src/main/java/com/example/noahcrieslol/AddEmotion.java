@@ -48,18 +48,11 @@ public class AddEmotion extends AppCompatActivity {
 
         //make array list of emotions in database
         mydb = new DBHelper(this);
-        ArrayList array_list = mydb.getAllEmotions();
-        String[] array = new String[array_list.size()];
+        ArrayList emotionArray = mydb.getAllEmotions();
 
         //autocomplete when filling in emotion
         Emotion = findViewById(R.id.Emotion);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, array_list);
-        /*for (int i= 0; i < array_list.size(); i++) {
-            if (array[i].equals(Emotion.getText().toString())) {
-                int color = mydb.getColor(Emotion.getText().toString());
-                OpenColorPicker.setBackgroundColor(color);
-            }
-        }*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, emotionArray);
         Emotion.setAdapter(adapter);
 
         //set color button and default color and open color picker
@@ -90,7 +83,7 @@ public class AddEmotion extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddEmotion.this, MainActivity.class));
+                startActivity(new Intent(AddEmotion.this, DailyCalendar.class));
             }
         });
 
@@ -103,6 +96,14 @@ public class AddEmotion extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String emotion = Emotion.getText().toString();
+                //finds if emotion already exists in database and if it does, automatically assigns color
+                for (int i= 1; i <= 7; i++) {
+                    String databaseEmotion = mydb.getEmotion(i);
+                    Integer databaseColor = mydb.getColor(i);
+                    if (databaseEmotion.equals(emotion)) {
+                        OpenColorPicker.setBackgroundColor(databaseColor);
+                    }
+                }
                 ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
                 Integer color = buttonColor.getColor();
                 String date = Date.getText().toString();
@@ -119,6 +120,7 @@ public class AddEmotion extends AppCompatActivity {
         });
     }
 
+    //method for adding text entered in to the database
     public void addData(String emotion, Integer color, String date, String time, String reason) {
         boolean insertData = mydb.addEmotion(emotion, color, date, time, reason);
         if(insertData == true) {

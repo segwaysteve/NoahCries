@@ -15,9 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DailyCalendar extends AppCompatActivity {
@@ -32,17 +34,19 @@ public class DailyCalendar extends AppCompatActivity {
         mydb = new DBHelper(this);
 
         DailyListView = (ListView) findViewById(R.id.DailyListView);
-        final ArrayList array_list = mydb.getAllEmotions();
-        ArrayAdapter arrayAdapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
+        final ArrayList array_list = mydb.getAllEmotionsAsId();
+        ArrayList array_listtwo = mydb.getAllEmotions();
+        Cursor cursor = mydb.getEverything();
+        ArrayAdapter arrayAdapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_2, cursor, new String[] {cursor.getString(cursor.getColumnIndex(DBHelper.col_1))}, new int[] {android.R.id.text1});
         DailyListView.setAdapter(arrayAdapter);
-
-
 
         DailyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String value = (String) parent.getAdapter().getItem(position);
+
                 // TODO Auto-generated method stub
-                int id_To_Search = arg2 + 1;
+                int id_To_Search = Integer.parseInt(value);
 
                 Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", id_To_Search);

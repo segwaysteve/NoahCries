@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditEmotion"></activity>
+        <activity android:name=".EmotionDisplay"></activity>
+        <activity android:name=".EditEmotion" />
         <activity
             android:name=".DailyCalendar"
-            android:label="Today">
+            android:label="Today&apos;s Emotions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,15 +22,15 @@
         </activity>
         <activity
             android:name=".WeeklyCalendar"
-            android:label="This week" />
+            android:label="This week&apos;s Emotions" />
         <activity
             android:name=".MonthlyCalendar"
-            android:label="This month" />
+            android:label="This month&apos;s Emotions" />
         <activity android:name=".AddEmotion" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

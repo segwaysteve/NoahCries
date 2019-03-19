@@ -60,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean updateEmotion (Integer id, String emotion, Integer color, String date, String time,String reason) {
+    public void updateEmotion (Integer id, String emotion, Integer color, String date, String time,String reason) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_2, emotion);
@@ -68,13 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(col_4, date);
         contentValues.put(col_5, time);
         contentValues.put(col_6, reason);
-        long result = db.update("Emotion", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
-        if (result == -1) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        db.update("Emotion", contentValues, col_1 + " = " + id, null);
     }
 
 
@@ -91,20 +85,62 @@ public class DBHelper extends SQLiteOpenHelper {
                 " WHERE " + col_1 + " = " + id);
     }
 
-    public Cursor getEmotion() {
+    /*public Cursor getEmotion() {
         Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
         return cursor;
-    }
+    }*/
 
 
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from Emotion where id="+id+"", null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME +
+                " where " + col_1 + " = " + id + " ", null);
         return res;
     }
 
+    public Cursor getEverything() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
+        return res;
+    }
 
+    public String getEmotion(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME +
+                " where " + col_1 + " = " + id + " ", null);
+        String emotion= "nothing";
+        if (res.moveToFirst()) {
+            emotion = res.getString(res.getColumnIndex(col_2));
+        }
+        return emotion;
+    }
+
+    public Integer getColor(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME +
+                " where " + col_1 + " = " + id + " ", null);
+        int color = 0;
+        if (res.moveToFirst()) {
+            color = res.getInt(res.getColumnIndex(col_3));
+        }
+        return color;
+    }
+
+
+    public ArrayList<String> getAllEmotionsAsId() {
+        ArrayList<String> array_list = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor res = db.rawQuery("select * from Emotion", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(col_1)));
+            res.moveToNext();
+        }
+
+        return array_list;
+    }
 
     public ArrayList<String> getAllEmotions() {
         ArrayList<String> array_list = new ArrayList<String>();
@@ -120,27 +156,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    /*public Integer getColor(String emotion) {
-        int color;
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor =
-        db.query(
-                "Emotion",               // name of the table to query
-                new String[]{"color"},     // String array of columns to extract
-                "emotion = ? ",                    // WHERE clause (? indicates an arg)
-                new String[]{emotion},     // The list of args to replace the ? (or ?'s on a sequential basis)
-                null,                         // GROUP BY clause
-                null,                         // HAVING clause
-                "t_id DESC",                  // ORDER clause
-                "1"                           // LIMIT value as a String
-        );
-        if (cursor.moveToFirst()) {
-            color = cursor.getInt(cursor.getColumnIndex("balance"));
-        } else {
-            color = 0;
-        }
-        return color;
-    }*/
-
 }
+
 
