@@ -78,14 +78,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public Integer deleteEmotion(Integer id) {
+    /*public Integer deleteEmotion(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("Emotion",
                 "id = ? ",
                 new String[] { Integer.toString(id) });
+    }*/
+
+    public void deleteEmotion(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME +
+                " WHERE " + col_1 + " = " + id);
     }
-
-
 
     public Cursor getEmotion() {
         Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
