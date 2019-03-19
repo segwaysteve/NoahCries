@@ -56,6 +56,9 @@ public class MonthlyCalendar extends AppCompatActivity {
             case R.id.Monthly:
                 startActivity(new Intent(this, MonthlyCalendar.class));
                 return true;
+            case R.id.Emotions:
+                startActivity(new Intent(this, EmotionDisplay.class));
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }

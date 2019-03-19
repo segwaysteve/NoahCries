@@ -48,7 +48,7 @@ public class AddEmotion extends AppCompatActivity {
 
         //make array list of emotions in database
         mydb = new DBHelper(this);
-        ArrayList emotionArray = mydb.getAllEmotions();
+        final ArrayList emotionArray = mydb.getAllDistinctEmotions();
 
         //autocomplete when filling in emotion
         Emotion = findViewById(R.id.Emotion);
@@ -97,15 +97,15 @@ public class AddEmotion extends AppCompatActivity {
             public void onClick(View v) {
                 String emotion = Emotion.getText().toString();
                 //finds if emotion already exists in database and if it does, automatically assigns color
-                for (int i= 1; i <= 7; i++) {
+                ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
+                Integer color = buttonColor.getColor();
+                for (int i= 1; i <= emotionArray.size(); i++) {
                     String databaseEmotion = mydb.getEmotion(i);
                     Integer databaseColor = mydb.getColor(i);
                     if (databaseEmotion.equals(emotion)) {
                         OpenColorPicker.setBackgroundColor(databaseColor);
                     }
                 }
-                ColorDrawable buttonColor = (ColorDrawable) OpenColorPicker.getBackground();
-                Integer color = buttonColor.getColor();
                 String date = Date.getText().toString();
                 String time = Time.getText().toString();
                 String reason = Reason.getText().toString();

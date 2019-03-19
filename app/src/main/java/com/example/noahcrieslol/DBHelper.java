@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.drawable.Drawable;
@@ -83,6 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME +
                 " WHERE " + col_1 + " = " + id);
+        db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE " + id + " = " + id);
     }
 
     /*public Cursor getEmotion() {
@@ -127,25 +129,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return color;
     }
 
-
-    public ArrayList<String> getAllEmotionsAsId() {
-        ArrayList<String> array_list = new ArrayList<String>();
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor res = db.rawQuery("select * from Emotion", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(col_1)));
-            res.moveToNext();
-        }
-
-        return array_list;
-    }
-
     public ArrayList<String> getAllDistinctEmotions() {
         ArrayList<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor res = db.query(true, "select * from Emotion", null);
+        Cursor res = db.query(true, TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6},
+                null, null, col_2, null, null, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {

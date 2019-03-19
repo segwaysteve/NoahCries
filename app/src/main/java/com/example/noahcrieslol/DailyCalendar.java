@@ -23,9 +23,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DailyCalendar extends AppCompatActivity {
-    private static final String TAG = "DailyCalendar";
     DBHelper mydb;
     ListView DailyListView;
+    String[] listEmotion;
+    String[] listDate;
+    String[] listTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class DailyCalendar extends AppCompatActivity {
         mydb = new DBHelper(this);
 
         DailyListView = (ListView) findViewById(R.id.DailyListView);
-        final ArrayList array_list = mydb.getAllEmotionsAsId();
+        final ArrayList array_list = mydb.getAllEmotions();
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array_list);
         DailyListView.setAdapter(arrayAdapter);
 
@@ -44,7 +46,7 @@ public class DailyCalendar extends AppCompatActivity {
                 String value = (String) parent.getAdapter().getItem(position);
 
                 // TODO Auto-generated method stub
-                int id_To_Search = Integer.parseInt(value);
+                int id_To_Search = position + 1;
 
                 Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", id_To_Search);
@@ -87,6 +89,9 @@ public class DailyCalendar extends AppCompatActivity {
                 return true;
             case R.id.Monthly:
                 startActivity(new Intent(this, MonthlyCalendar.class));
+                return true;
+            case R.id.Emotions:
+                startActivity(new Intent(this, EmotionDisplay.class));
                 return true;
             default:
                 return super.onContextItemSelected(item);

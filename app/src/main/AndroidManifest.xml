@@ -9,8 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EmotionDisplay"></activity>
-        <activity android:name=".EditEmotion" />
+        <activity android:name=".DailyListActivity"></activity>
+        <activity
+            android:name=".EmotionDisplay"
+            android:label="Saved Emotions" />
+        <activity
+            android:name=".AddEmotion"
+            android:label="Add Emotion" />
+        <activity
+            android:name=".EditEmotion"
+            android:label="Edit Emotion" />
         <activity
             android:name=".DailyCalendar"
             android:label="Today&apos;s Emotions">
@@ -26,7 +34,6 @@
         <activity
             android:name=".MonthlyCalendar"
             android:label="This month&apos;s Emotions" />
-        <activity android:name=".AddEmotion" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
