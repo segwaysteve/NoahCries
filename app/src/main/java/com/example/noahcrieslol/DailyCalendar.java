@@ -35,9 +35,7 @@ public class DailyCalendar extends AppCompatActivity {
 
         DailyListView = (ListView) findViewById(R.id.DailyListView);
         final ArrayList array_list = mydb.getAllEmotionsAsId();
-        ArrayList array_listtwo = mydb.getAllEmotions();
-        Cursor cursor = mydb.getEverything();
-        ArrayAdapter arrayAdapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_2, cursor, new String[] {cursor.getString(cursor.getColumnIndex(DBHelper.col_1))}, new int[] {android.R.id.text1});
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array_list);
         DailyListView.setAdapter(arrayAdapter);
 
         DailyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

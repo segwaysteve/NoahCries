@@ -142,6 +142,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public ArrayList<String> getAllDistinctEmotions() {
+        ArrayList<String> array_list = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor res = db.query(true, "select * from Emotion", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(col_2)));
+            res.moveToNext();
+        }
+
+        return array_list;
+    }
+
     public ArrayList<String> getAllEmotions() {
         ArrayList<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();
