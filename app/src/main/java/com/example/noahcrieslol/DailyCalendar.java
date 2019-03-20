@@ -28,6 +28,7 @@ import java.util.Locale;
 public class DailyCalendar extends AppCompatActivity {
     DBHelper mydb;
     ListView DailyListView;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,16 @@ public class DailyCalendar extends AppCompatActivity {
         setContentView(R.layout.daily_calendar);
         mydb = new DBHelper(this);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
-        String date = dateFormat.format(Calendar.getInstance().getTime());
+
+
+        Intent incomingIntent = getIntent();
+        if(incomingIntent.getStringExtra("date") == null) {
+            date = dateFormat.format(Calendar.getInstance().getTime());
+        }
+        else {
+            date = incomingIntent.getStringExtra("date");
+        }
+
 
         DailyListView = (ListView) findViewById(R.id.DailyListView);
         final ArrayList array_list = mydb.getDayEmotions(date);
@@ -51,6 +61,7 @@ public class DailyCalendar extends AppCompatActivity {
 
                 Bundle dataBundle = new Bundle();
                 dataBundle.putInt("id", id_To_Search);
+                dataBundle.putString("date", date);
 
                 Intent intent = new Intent(getApplicationContext(), EditEmotion.class);
 
@@ -82,9 +93,6 @@ public class DailyCalendar extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.Daily:
-                startActivity(new Intent(this, DailyCalendar.class));
-                return true;
             case R.id.Weekly:
                 startActivity(new Intent(this, WeeklyCalendar.class));
                 return true;

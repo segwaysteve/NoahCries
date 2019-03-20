@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class EditEmotion extends AppCompatActivity {
     AutoCompleteTextView EditEmotion;
@@ -26,8 +29,6 @@ public class EditEmotion extends AppCompatActivity {
     Button EditDelete;
     Button EditCancel;
     int id_To_Update = 0;
-    private int selectedID;
-    private String selectedEmotion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,14 @@ public class EditEmotion extends AppCompatActivity {
         EditDate = (EditText) findViewById(R.id.EditDate);
         EditTime = (EditText) findViewById(R.id.EditTime);
         EditReason = (EditText) findViewById(R.id.EditReason);
+
+        DefaultColor = ContextCompat.getColor(EditEmotion.this, R.color.colorPrimary);
+        EditOpenColorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openColorPicker();
+            }
+        });
 
         mydb = new DBHelper(this);
 
@@ -75,6 +84,8 @@ public class EditEmotion extends AppCompatActivity {
                 EditReason.setText((CharSequence) reason);
             }
         }
+
+
 
         EditUpdate = (Button) findViewById(R.id.EditUpdate);
         EditUpdate.setOnClickListener(new View.OnClickListener() {
@@ -124,5 +135,21 @@ public class EditEmotion extends AppCompatActivity {
                 startActivity(new Intent(EditEmotion.this, DailyCalendar.class));
             }
         });
+    }
+
+    public void openColorPicker() {
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, DefaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                DefaultColor = color;
+                EditOpenColorPicker.setBackgroundColor(DefaultColor);
+            }
+        });
+        colorPicker.show();
     }
 }

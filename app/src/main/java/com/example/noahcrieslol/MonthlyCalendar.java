@@ -8,21 +8,62 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class MonthlyCalendar extends AppCompatActivity {
     CalendarView calendarView;
+    TextView ModeEmotion;
+    TextView ModeEmotionText;
+    TextView ModeReason;
+    TextView ModeReasonText;
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.monthly_calendar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        mydb = new DBHelper(this);
+
+        ModeEmotion = (TextView) findViewById(R.id.ModeEmotion);
+        ModeEmotionText = (TextView) findViewById(R.id.ModeEmotionText);
+        String modeEmotion = mydb.getModeEmotion();
+        if (modeEmotion == null) {
+            ModeEmotionText.setText("You did not have a most common emotion this month");
+        }
+        else {
+            ModeEmotion.setText(modeEmotion);
+        }
+
+        ModeReason = (TextView) findViewById(R.id.ModeReason);
+        ModeReasonText = (TextView) findViewById(R.id.ModeReasonText);
+        String modeReason = mydb.getModeReason();
+        if (modeReason == null) {
+            ModeReasonText.setText("You did not have a most common reason this month");
+        }
+        else {
+            ModeReason.setText(modeReason);
+        }
 
         calendarView = (CalendarView) findViewById(R.id.MonthlyCalendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange( CalendarView view, int year, int month, int dayOfMonth) {
-                startActivity(new Intent(MonthlyCalendar.this, DailyCalendar.class));
+                String DayOfMonth = dayOfMonth + "";
+                if (String.valueOf(dayOfMonth).length() == 1) {
+                    DayOfMonth = "0" + dayOfMonth;
+                }
+                String Month = (month + 1) + "";
+                if (String.valueOf(month).length() == 1) {
+                    Month = "0" + (month + 1);
+                }
+                String date = Month + "/" + DayOfMonth + "/" + year;
+                Intent intent = new Intent(MonthlyCalendar.this, DailyCalendar.class);
+                intent.putExtra("date", date);
+                startActivity(intent);
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,9 +93,6 @@ public class MonthlyCalendar extends AppCompatActivity {
                 return true;
             case R.id.Weekly:
                 startActivity(new Intent(this, WeeklyCalendar.class));
-                return true;
-            case R.id.Monthly:
-                startActivity(new Intent(this, MonthlyCalendar.class));
                 return true;
             case R.id.Emotions:
                 startActivity(new Intent(this, EmotionDisplay.class));

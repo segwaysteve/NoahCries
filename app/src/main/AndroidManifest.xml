@@ -33,10 +33,6 @@
         <activity
             android:name=".MonthlyCalendar"
             android:label="This month&apos;s Emotions" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

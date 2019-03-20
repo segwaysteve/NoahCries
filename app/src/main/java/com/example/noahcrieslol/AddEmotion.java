@@ -40,6 +40,7 @@ public class AddEmotion extends AppCompatActivity {
     Integer DefaultColor;
     Button cancel;
     Button OpenColorPicker;
+    ArrayList emotionArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class AddEmotion extends AppCompatActivity {
 
         //make array list of emotions in database
         mydb = new DBHelper(this);
-        final ArrayList emotionArray = mydb.getAllDistinctEmotions();
+        emotionArray = mydb.getAllDistinctEmotions();
 
         //autocomplete when filling in emotion
         Emotion = findViewById(R.id.Emotion);
@@ -104,6 +105,7 @@ public class AddEmotion extends AppCompatActivity {
                     Integer databaseColor = mydb.getColor(i);
                     if (databaseEmotion.equals(emotion)) {
                         OpenColorPicker.setBackgroundColor(databaseColor);
+                        color = databaseColor;
                     }
                 }
                 String date = Date.getText().toString();

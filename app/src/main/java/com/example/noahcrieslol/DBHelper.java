@@ -61,7 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
 
-    public void updateEmotion (Integer id, String emotion, Integer color, String date, String time,String reason) {
+    public void updateEmotion (Integer id, String emotion, Integer color, String date, String time, String reason) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_2, emotion);
@@ -72,14 +72,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("Emotion", contentValues, col_1 + " = " + id, null);
     }
 
-
-    /*public Integer deleteEmotion(Integer id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("Emotion",
-                "id = ? ",
-                new String[] { Integer.toString(id) });
-    }*/
-
     public void deleteEmotion(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME +
@@ -87,23 +79,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE " + id + " = " + id);
     }
 
-    /*public Cursor getEmotion() {
-        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        return cursor;
-    }*/
-
-
 
     public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from " + TABLE_NAME +
                 " where " + col_1 + " = " + id + " ", null);
-        return res;
-    }
-
-    public Cursor getEverything() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
         return res;
     }
 
@@ -144,7 +124,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public String getModeReason() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.query(TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6}, null,
-                null, col_6, "COUNT (*) = ( SELECT MAX(Cnt) FROM( SELECT COUNT(*) as Cnt FROM " + TABLE_NAME + " GROUP BY " + col_2 + " ) tmp )",
+                null, col_6, "COUNT (*) = ( SELECT MAX(Cnt) FROM( SELECT COUNT(*) as Cnt FROM " + TABLE_NAME + " GROUP BY " + col_6 + " ) tmp )",
                 null, null);
         String mode = null;
         if (res.moveToFirst()) {
@@ -168,29 +148,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public ArrayList<String> getAllEmotions() {
+    public ArrayList<String> getDayEmotions(String date) {
         ArrayList<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor res = db.rawQuery("select * from Emotion", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(col_2)));
-            res.moveToNext();
-        }
-
-        return array_list;
-    }
-
-    public ArrayList<String> getDayEmotions(String date) {
-        ArrayList<String> array_list = new ArrayList<String>();
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor res = db.query(TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6}, null,
-                null, col_4, col_4 + " = " + date, null, null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(col_2)));
+            if (res.getString(res.getColumnIndex(col_4)).equals(date)) {
+                array_list.add(res.getString(res.getColumnIndex(col_2)));
+            }
             res.moveToNext();
         }
 
