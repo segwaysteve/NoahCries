@@ -20,31 +20,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class DailyCalendar extends AppCompatActivity {
     DBHelper mydb;
     ListView DailyListView;
-    String[] listEmotion;
-    String[] listDate;
-    String[] listTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daily_calendar);
         mydb = new DBHelper(this);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        String date = dateFormat.format(Calendar.getInstance().getTime());
 
         DailyListView = (ListView) findViewById(R.id.DailyListView);
-        final ArrayList array_list = mydb.getAllEmotions();
+        final ArrayList array_list = mydb.getDayEmotions(date);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array_list);
         DailyListView.setAdapter(arrayAdapter);
+
 
         DailyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String) parent.getAdapter().getItem(position);
-
                 // TODO Auto-generated method stub
                 int id_To_Search = position + 1;
 

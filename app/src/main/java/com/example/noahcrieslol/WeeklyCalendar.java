@@ -19,6 +19,9 @@ import java.util.List;
 public class WeeklyCalendar extends AppCompatActivity {
     ListView WeeklyListView;
     TextView ModeEmotion;
+    TextView ModeReason;
+    TextView ModeEmotionText;
+    TextView ModeReasonText;
     DBHelper mydb;
 
     @Override
@@ -41,8 +44,24 @@ public class WeeklyCalendar extends AppCompatActivity {
         WeeklyListView.setAdapter(arrayAdapter);
 
         ModeEmotion = (TextView) findViewById(R.id.ModeEmotion);
+        ModeEmotionText = (TextView) findViewById(R.id.ModeEmotionText);
         String modeEmotion = mydb.getModeEmotion();
-        ModeEmotion.setText(modeEmotion);
+        if (modeEmotion == null) {
+            ModeEmotionText.setText("You did not have a most common emotion this week");
+        }
+        else {
+            ModeEmotion.setText(modeEmotion);
+        }
+
+        ModeReason = (TextView) findViewById(R.id.ModeReason);
+        ModeReasonText = (TextView) findViewById(R.id.ModeReasonText);
+        String modeReason = mydb.getModeReason();
+        if (modeReason == null) {
+            ModeReasonText.setText("You did not have a most common reason this week");
+        }
+        else {
+            ModeReason.setText(modeReason);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -136,7 +136,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 null, null);
         String mode = null;
         if (res.moveToFirst()) {
-            mode = res.getString(res.getColumnIndex(col_3));
+            mode = res.getString(res.getColumnIndex(col_2));
+        }
+        return mode;
+    }
+
+    public String getModeReason() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.query(TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6}, null,
+                null, col_6, "COUNT (*) = ( SELECT MAX(Cnt) FROM( SELECT COUNT(*) as Cnt FROM " + TABLE_NAME + " GROUP BY " + col_2 + " ) tmp )",
+                null, null);
+        String mode = null;
+        if (res.moveToFirst()) {
+            mode = res.getString(res.getColumnIndex(col_6));
         }
         return mode;
     }
@@ -160,6 +172,21 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<String> array_list = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor res = db.rawQuery("select * from Emotion", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(col_2)));
+            res.moveToNext();
+        }
+
+        return array_list;
+    }
+
+    public ArrayList<String> getDayEmotions(String date) {
+        ArrayList<String> array_list = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor res = db.query(TABLE_NAME, new String[] {col_1, col_2, col_3, col_4, col_5, col_6}, null,
+                null, col_4, col_4 + " = " + date, null, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
